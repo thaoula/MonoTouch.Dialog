@@ -39,6 +39,11 @@ namespace MonoTouch.Dialog
 		public string Caption;
 		
 		/// <summary>
+		/// This can be used to store arbitary data with the element
+		/// </summary>
+		public object Tag;
+		
+		/// <summary>
 		///  Initializes the element with the given caption.
 		/// </summary>
 		/// <param name="caption">
