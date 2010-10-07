@@ -1,3 +1,7 @@
+2010-10-08  thaoula <thaoula@gmail.com>
+	
+	* Add a Tag field to element to allow users to tag an object to any element.
+
 2010-06-15     Redth	<jondick@gmail.com>
 
 	* MonoTouch.Dialog/ActivityElement.cs : Made activity indicator
