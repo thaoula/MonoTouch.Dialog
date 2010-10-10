@@ -8,33 +8,33 @@ namespace MonoTouch.Dialog
 	{
 		#region Font
 		
-		public UIFont TextFont;
-		public UIFont DetailFont;
+		public UIFont TextFont { get; set; }
+		public UIFont DetailFont { get; set; }
 				
 		#endregion
 	
 		#region TextAlignment
 		
-		public UITextAlignment? TextAlignment;
-		public UITextAlignment? DetailAlignment;
+		public UITextAlignment? TextAlignment { get; set; }
+		public UITextAlignment? DetailAlignment { get; set; }
 		
 		#endregion
 		
 		#region "Color"
 		
-		public UIColor BackgroundColor;
-		public UIColor TextColor;
-		public UIColor TextBackgroundColor;
-		public UIColor TextHighlightColor;
-		public UIColor DetailColor;
-		public UIColor DetailBackgroundColor;
-		public UIColor DetailHighlightColor;
+		public UIColor BackgroundColor { get; set; }
+		public UIColor TextColor { get; set; }
+		public UIColor TextBackgroundColor { get; set; }
+		public UIColor TextHighlightColor { get; set; }
+		public UIColor DetailColor { get; set; }
+		public UIColor DetailBackgroundColor { get; set; }
+		public UIColor DetailHighlightColor { get; set; }
 		
 		#endregion
 		
 		#region "General"
 		
-		public UITableViewCellAccessory? Accessory;
+		public UITableViewCellAccessory? Accessory { get; set; }
 		
 		#endregion
 	
