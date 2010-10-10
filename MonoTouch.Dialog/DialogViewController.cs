@@ -19,14 +19,17 @@ namespace MonoTouch.Dialog
 {
 	public class DialogViewController : UITableViewController
 	{
-		public UITableViewStyle Style = UITableViewStyle.Grouped;
+		public UITableViewStyle Style = UITableViewStyle.Plain;
 		UISearchBar searchBar;
 		UITableView tableView;
 		RefreshTableHeaderView refreshView;
 		RootElement root;
+		
 		bool pushing;
 		bool dirty;
 		bool reloading;
+		
+		public UIColor BackgroundColor;
 
 		/// <summary>
 		/// The root element displayed by the DialogViewController, the value can be changed during runtime to update the contents.
@@ -468,7 +471,11 @@ namespace MonoTouch.Dialog
 		
 		public virtual UITableView MakeTableView (RectangleF bounds, UITableViewStyle style)
 		{
-			return new UITableView (bounds, style);
+			var table = new UITableView (bounds, style);
+			if (BackgroundColor != null)
+				table.BackgroundColor = BackgroundColor;
+			
+			return table;
 		}
 		
 		public override void LoadView ()
@@ -569,11 +576,13 @@ namespace MonoTouch.Dialog
 		
 		public DialogViewController (RootElement root) : base (UITableViewStyle.Grouped)
 		{
+			Style = UITableViewStyle.Grouped;
 			PrepareRoot (root);
 		}
 		
 		public DialogViewController (UITableViewStyle style, RootElement root) : base (style)
 		{
+			Style = style;
 			PrepareRoot (root);
 		}
 		
@@ -590,12 +599,14 @@ namespace MonoTouch.Dialog
 		/// </param>
 		public DialogViewController (RootElement root, bool pushing) : base (UITableViewStyle.Grouped)
 		{
+			Style = UITableViewStyle.Grouped;
 			this.pushing = pushing;
 			PrepareRoot (root);
 		}
 
 		public DialogViewController (UITableViewStyle style, RootElement root, bool pushing) : base (style)
 		{
+			Style = style;
 			this.pushing = pushing;
 			PrepareRoot (root);
 		}
