@@ -39,7 +39,7 @@ namespace MonoTouch.Dialog
 		public string Caption;
 		
 		/// <summary>
-		/// This can be used to store arbitary data with the element
+		/// Used to store arbitary data with the element
 		/// </summary>
 		public object Tag;
 		
@@ -65,7 +65,12 @@ namespace MonoTouch.Dialog
 		
 		public virtual UITableViewCell GetCell (UITableView tv)
 		{
-			return new UITableViewCell (UITableViewCellStyle.Default, "xx");
+			var cell = new UITableViewCell (UITableViewCellStyle.Default, "xx");
+
+			// Apply the style
+			ApplyStyle(cell);
+			
+			return cell;
 		}
 		
 		static protected void RemoveTag (UITableViewCell cell, int tag)
@@ -143,6 +148,87 @@ namespace MonoTouch.Dialog
 				return false;
 			return Caption.IndexOf (text, StringComparison.CurrentCultureIgnoreCase) != -1;
 		}
+		
+		#region Style Support
+		
+		/// <summary>
+		/// Used to store the class of current item
+		/// </summary>
+		public string CssClass;
+		
+		/// <summary>
+		/// Flag to indicate whether the cell inherits its style from its ancestors
+		/// </summary>
+		public bool InheritStyle = true;
+		
+		/// <summary>
+		/// Returns the ElementStyle from the style sheet
+		/// </summary>
+		protected ElementStyle ElementStyle
+		{
+			get 
+			{ 
+				if (_styleSheet == null) return null;
+				return StyleSheet.Get(CssClass); 
+			}
+		}
+		
+		/// <summary>
+		/// Return the inherited style CSS style.
+		/// </summary>
+		protected ElementStyle InheritedStyle
+		{
+			get
+			{
+				var elementStyle = ElementStyle;
+				
+				if (!InheritStyle) 
+				{
+					return elementStyle;
+				}
+				
+				var parent = Parent;
+				var style = elementStyle == null ? new ElementStyle() : elementStyle;
+				
+				while (parent != null)
+				{
+					if (parent.ElementStyle != null)
+						style = style.Inherit(parent.ElementStyle);
+					
+					parent = parent.Parent;
+				}
+				
+				return style;
+			}
+		}
+		
+		/// <summary>
+		/// This should be called to apply the style to the cell during GetCell
+		/// </summary>
+		protected virtual void ApplyStyle(UITableViewCell cell)
+		{
+			ElementStyle item = InheritStyle ? InheritedStyle : ElementStyle;
+			if (item == null) return;
+
+			item.Apply(cell);
+		}
+		
+		/// <summary>
+		/// Returns the stylesheet to use
+		/// </summary>
+		/// <returns>
+		private StyleSheet _styleSheet = StyleSheet.Default;
+		public StyleSheet StyleSheet
+		{
+			get { return _styleSheet; }
+			set 
+			{ 
+				_styleSheet = value; 
+			}
+		}
+		
+		#endregion
+		
 	}
 
 	public abstract class BoolElement : Element {
@@ -206,6 +292,10 @@ namespace MonoTouch.Dialog
 		
 			cell.TextLabel.Text = Caption;
 			cell.ContentView.AddSubview (sw);
+			
+			// Add Style
+			ApplyStyle(cell);
+			
 
 			return cell;
 		}
@@ -365,7 +455,7 @@ namespace MonoTouch.Dialog
 				cell.SelectionStyle = UITableViewCellSelectionStyle.None;
 			} else
 				RemoveTag (cell, 1);
-
+			
 			SizeF captionSize = new SizeF (0, 0);
 			if (Caption != null && ShowCaption){
 				cell.TextLabel.Text = Caption;
@@ -388,6 +478,11 @@ namespace MonoTouch.Dialog
 			}
 			
 			cell.ContentView.AddSubview (slider);
+			
+			// Add Style
+			ApplyStyle(cell);
+			
+			
 			return cell;
 		}
 
@@ -442,6 +537,10 @@ namespace MonoTouch.Dialog
 			cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 			
 			cell.TextLabel.Text = Caption;
+			
+			// Add Style
+			ApplyStyle(cell);
+			
 			return cell;
 		}
 
@@ -549,6 +648,9 @@ namespace MonoTouch.Dialog
 			if (cell.DetailTextLabel != null)
 				cell.DetailTextLabel.Text = Value == null ? "" : Value;
 			
+			// Apply Style
+			ApplyStyle(cell);
+			
 			return cell;
 		}
 
@@ -607,6 +709,9 @@ namespace MonoTouch.Dialog
 			if (cell.DetailTextLabel != null)
 				cell.DetailTextLabel.Text = Value == null ? "" : Value;
 			
+			// Apply Style
+			ApplyStyle(cell);
+			
 			return cell;
 		}		
 	}
@@ -647,6 +752,13 @@ namespace MonoTouch.Dialog
 			this.Accessory = UITableViewCellAccessory.None;
 		}
 		
+		public ImageStringElement (string caption, string value, NSAction tapped, UIImage image) : base (caption, tapped)
+		{
+			this.image = image;
+			this.Accessory = UITableViewCellAccessory.None;
+			this.Value = value;
+		}
+		
 		public override UITableViewCell GetCell (UITableView tv)
 		{
 			var cell = tv.DequeueReusableCell (skey);
@@ -664,6 +776,9 @@ namespace MonoTouch.Dialog
 			// The check is needed because the cell might have been recycled.
 			if (cell.DetailTextLabel != null)
 				cell.DetailTextLabel.Text = Value == null ? "" : Value;
+			
+			// Add Style
+			ApplyStyle(cell);
 			
 			return cell;
 		}
@@ -693,6 +808,9 @@ namespace MonoTouch.Dialog
 			var tl = cell.TextLabel;
 			tl.LineBreakMode = UILineBreakMode.WordWrap;
 			tl.Lines = 0;
+			
+			// Add Style
+			ApplyStyle(cell);
 
 			return cell;
 		}
@@ -728,6 +846,9 @@ namespace MonoTouch.Dialog
 			
 			bool selected = RadioIdx == ((RadioGroup)(root.group)).Selected;
 			cell.Accessory = selected ? UITableViewCellAccessory.Checkmark : UITableViewCellAccessory.None;
+			
+			// Add Style
+			ApplyStyle(cell);
 
 			return cell;
 		}
@@ -767,6 +888,10 @@ namespace MonoTouch.Dialog
 		UITableViewCell ConfigCell (UITableViewCell cell)
 		{
 			cell.Accessory = Value ? UITableViewCellAccessory.Checkmark : UITableViewCellAccessory.None;
+			
+			// Add Style
+			ApplyStyle(cell);
+			
 			return cell;
 		}
 		
@@ -882,6 +1007,10 @@ namespace MonoTouch.Dialog
 					cell.ImageView.Image = UIImage.FromImage (bit.ToImage ());
 				}
 			}			
+			
+			// Add Style
+			ApplyStyle(cell);
+			
 			return cell;
 		}
 		
@@ -1110,6 +1239,10 @@ namespace MonoTouch.Dialog
 			
 			cell.TextLabel.Text = Caption;
 			cell.ContentView.AddSubview (entry);
+			
+			// Add Style
+			ApplyStyle(cell);
+			
 			return cell;
 		}
 		
@@ -1350,6 +1483,10 @@ namespace MonoTouch.Dialog
 				
 				cell.ContentView.AddSubview (View);
 			} 
+			
+			// Add Style
+			ApplyStyle(cell);
+			
 			return cell;
 		}
 		
@@ -2169,6 +2306,9 @@ namespace MonoTouch.Dialog
 		le:
 			cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 			
+			// Add Style
+			ApplyStyle(cell);
+			
 			return cell;
 		}
 		
@@ -2177,7 +2317,7 @@ namespace MonoTouch.Dialog
 		///    customize the UIViewController before it is presented
 		/// </summary>
 		protected virtual void PrepareDialogViewController (UIViewController dvc)
-		{
+		{                                
 		}
 		
 		/// <summary>
@@ -2188,17 +2328,34 @@ namespace MonoTouch.Dialog
 			if (createOnSelected != null)
 				return createOnSelected (this);
 			
-			return new DialogViewController (this, true) {
-				Autorotate = true
+			var dvc = new DialogViewController (this, true) {
+				Autorotate = true,
 			};
+			
+			// Set table background colour 
+			if (_backgroundColor != null)
+				dvc.BackgroundColor = _backgroundColor;
+			
+			return dvc;
 		}
+		
+		/// <summary>
+		/// Tracks the background color of the current tableView
+		/// </summary>
+		private UIColor _backgroundColor;
 		
 		public override void Selected (DialogViewController dvc, UITableView tableView, NSIndexPath path)
 		{
+			// Save the background colour
+			_backgroundColor = tableView.BackgroundColor;
+			
 			tableView.DeselectRow (path, false);
 			var newDvc = MakeViewController ();
 			PrepareDialogViewController (newDvc);
 			dvc.ActivateController (newDvc);
+			
+			// Clear the background colour
+			_backgroundColor = null;
 		}
 		
 		public void Reload (Section section, UITableViewRowAnimation animation)
