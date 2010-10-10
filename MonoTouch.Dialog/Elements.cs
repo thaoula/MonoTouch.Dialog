@@ -52,6 +52,7 @@ namespace MonoTouch.Dialog
 		public Element (string caption)
 		{
 			this.Caption = caption;
+			InheritStyle = true;
 		}	
 		
 		public void Dispose ()
@@ -154,12 +155,12 @@ namespace MonoTouch.Dialog
 		/// <summary>
 		/// Used to store the class of current item
 		/// </summary>
-		public string CssClass;
+		public string CssClass { get; set; }
 		
 		/// <summary>
 		/// Flag to indicate whether the cell inherits its style from its ancestors
 		/// </summary>
-		public bool InheritStyle = true;
+		public bool InheritStyle { get; set; }
 		
 		/// <summary>
 		/// Returns the ElementStyle from the style sheet
@@ -1567,6 +1568,11 @@ namespace MonoTouch.Dialog
 			FooterView = footer;
 		}
 		
+		public Section (string caption, string footer, string cssClass) : this (caption, footer) 
+		{
+			CssClass = cssClass;
+		}
+		
 		/// <summary>
 		///    The section header, as a string
 		/// </summary>
@@ -1987,6 +1993,12 @@ namespace MonoTouch.Dialog
 		public RootElement (string caption, Group group) : base (caption)
 		{
 			this.group = group;
+		}
+		
+		public RootElement (string caption, Group group, string cssClass) : base (caption)
+		{
+			this.group = group;
+			this.CssClass = cssClass;
 		}
 		
 		internal List<Section> Sections = new List<Section> ();
