@@ -38,8 +38,8 @@
     <MtouchDebug>False</MtouchDebug>
     <MtouchLink>Full</MtouchLink>
     <MtouchI18n />
-    <MtouchSdkVersion>3.0</MtouchSdkVersion>
-    <MtouchMinimumOS>3.0</MtouchMinimumOS>
+    <MtouchSdkVersion>4.1</MtouchSdkVersion>
+    <MtouchMinimumOS>4.1</MtouchMinimumOS>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -89,6 +89,7 @@
     <Compile Include="DemoLoadMore.cs" />
     <Compile Include="DemoEditing.cs" />
     <Compile Include="DemoOwnerDrawnElement.cs" />
+    <Compile Include="DemoStyle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xib" />
@@ -111,5 +112,9 @@
     <Content Include="jakub-calendar.png" />
     <Content Include="favorite.png" />
     <Content Include="favorited.png" />
+    <Content Include="free-apple-wallpapers.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Info.plist" />
   </ItemGroup>
 </Project>
