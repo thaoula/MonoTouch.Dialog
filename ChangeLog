@@ -1,3 +1,23 @@
+2010-10-10  thaoula <thaoula@gmail.com>
+	
+	* Changed the DVC constructors so that they save the passed in UITableViewStyle. Previously, the style passed to the constructor was passed along to the based
+	UITableViewController and not saved. Since the UITableView was actually created in the loadView function and the Style field was not updated you always got a Grouped 	UITableView which is cool until you want a plain one.
+
+	* Add the following properties / methods to Element. 
+
+	- CssClass: This property is used to specify the name of a Style sheet class you wish to use to style an element.
+	- InheritStyle: This property is a flag that allows elements to block Style inheritance.
+	- InheritedStyle: This property returns an ElementStyle object with the styles inherited all the way up the Element tree.
+	- ElementStyle: This property return the ElementStyle from the stylesheet.
+	- ApplyStyle: This method should be called in GetCell to apply any inherited styles.
+
+	- Add ApplyStyle to all GetCell functions.
+
+	* Created the ElementStyle class that represents a style.
+	* Create the StyleSheet class as a container for all the styles. The Default property returns a static instance that be be used throughout the application.
+
+	If the style concept is accepted then many of the style related derivatives of several elements could be marked as Depricated.
+
 2010-10-08  thaoula <thaoula@gmail.com>
 	
 	* Add a Tag field to element to allow users to tag an object to any element.
