@@ -91,7 +91,9 @@
     <Compile Include="ActivityElement.cs" />
     <Compile Include="LoadMoreElement.cs" />
     <Compile Include="OwnerDrawnElement.cs" />
-    <Compile Include="ElementStyle.cs" />
+    <Compile Include="Style.cs" />
+    <Compile Include="StyledAccessories.cs" />
+    <Compile Include="StyledElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
